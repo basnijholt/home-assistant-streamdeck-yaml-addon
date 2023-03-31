@@ -4,7 +4,6 @@ version: dev
 slug: home-assistant-streamdeck-yaml
 description: home-assistant-streamdeck-yaml add-on by Bas Nijholt
 url: https://github.com/basnijholt/home-assistant-streamdeck-yaml-addon
-startup: before
 hassio_api: true
 hassio_role: default
 arch:
@@ -15,11 +14,13 @@ arch:
   - i386
 boot: auto
 ports:
-  websocket_port/tcp: null
+  80/tcp: 80
+  443/tcp: 443
 ports_description:
-  websocket_port/tcp: home-assistant-streamdeck-yaml WebSocket port
+  80/tcp: home-assistant-streamdeck-yaml WebSocket port
+  443/tcp: home-assistant-streamdeck-yaml WebSocket SSL port
 devices:
-  - /dev/bus/usb:/dev/bus/usb:rwm
+  - /dev/bus/usb
 panel_icon: mdi:radiator
 options:
   hass_host: 192.168.1.24
