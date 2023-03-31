@@ -34,8 +34,8 @@ options:
   streamdeck_dotenv: ""
   hass_host: ""
   hass_token: ""
-  streamdeck_config: "/config/streamdeck.yaml"
-  websocket_protocol: wss
+  streamdeck_config: ""
+  websocket_protocol: ""
 schema:
   streamdeck_dotenv: str
   hass_host: str
