@@ -51,8 +51,8 @@ else
 
     # Use automatic values for hass_host and hass_token if they are empty
     if [[ -z "${hass_host}" ]]; then
-        bashio::log.info "🔍 Using the host of the Supervisor as the Home Assistant host"
-        hass_host=$(bashio::supervisor.info.host)
+        hass_host=$(bashio::supervisor.ip_address)
+        bashio::log.info "🔍 Using the host of the Supervisor as the Home Assistant host: ${hass_host}"
     fi
 
     if [[ -z "${hass_token}" ]]; then
