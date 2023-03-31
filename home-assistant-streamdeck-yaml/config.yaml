@@ -10,6 +10,7 @@ description: |
   Also check out the add-on documentation (https://basnijholt.github.io/home-assistant-streamdeck-yaml-addon/) for add-on configuration details.
 url: https://github.com/basnijholt/home-assistant-streamdeck-yaml-addon
 hassio_api: true
+homeassistant_api: true
 init: false
 hassio_role: default
 arch:
