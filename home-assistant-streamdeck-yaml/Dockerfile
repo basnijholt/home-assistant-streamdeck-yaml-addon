@@ -1,4 +1,5 @@
-ARG BUILD_FROM=ghcr.io/hassio-addons/base/amd64:11.1.0
+ARG BUILD_FROM=ghcr.io/hassio-addons/debian-base:6.2.4
+
 FROM ${BUILD_FROM}
 
 # Build arguments
