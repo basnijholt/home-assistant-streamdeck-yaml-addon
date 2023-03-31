@@ -7,5 +7,5 @@
 bashio::log.info "Starting home-assistant-streamdeck-yaml..."
 
 # RUN home-assistant-streamdeck-yaml
-cd /opt || exit
-exec ./home-assistant-streamdeck-yaml
+cd /app || exit
+exec home-assistant-streamdeck-yaml

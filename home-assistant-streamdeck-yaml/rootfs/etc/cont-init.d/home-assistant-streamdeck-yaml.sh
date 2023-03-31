@@ -22,6 +22,6 @@ sed -i "s/%%WEBSOCKET_PROTOCOL%%/${websocket_protocol}/g" ${CONF}
 mv ${CONF} /app/.env
 
 # Copy the Stream Deck YAML configuration file to the add-on
-cp "${streamdeck_yaml}" /app/configuration.yaml
+cp "${streamdeck_config}" /app/configuration.yaml
 
 bashio::log.info "Finished the config overwriting."
