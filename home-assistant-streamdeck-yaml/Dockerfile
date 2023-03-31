@@ -39,6 +39,7 @@ RUN wget https://github.com/basnijholt/home-assistant-streamdeck-yaml/archive/ma
 WORKDIR /app
 
 # Install the required dependencies
+RUN pip3 install -U pip setuptools wheel
 RUN pip3 install -e "."
 
 # Purge the pip cache
