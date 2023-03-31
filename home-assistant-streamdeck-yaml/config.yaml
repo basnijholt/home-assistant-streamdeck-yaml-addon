@@ -19,8 +19,11 @@ ports:
 ports_description:
   80/tcp: home-assistant-streamdeck-yaml WebSocket port
   443/tcp: home-assistant-streamdeck-yaml WebSocket SSL port
+usb: true
 devices:
   - /dev/bus/usb
+map:
+  - config:rw
 panel_icon: mdi:radiator
 options:
   hass_host: 192.168.1.24
