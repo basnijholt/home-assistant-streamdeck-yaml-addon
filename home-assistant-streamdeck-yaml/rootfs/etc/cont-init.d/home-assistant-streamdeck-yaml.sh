@@ -51,13 +51,13 @@ else
 
     # Use automatic values for hass_host and hass_token if they are empty
     if [[ -z "${hass_host}" ]]; then
-        hass_host=$(bashio::supervisor.ip_address)
+        hass_host="supervisor"
         bashio::log.info "🔍 Using the host of the Supervisor as the Home Assistant host: ${hass_host}"
     fi
 
     if [[ -z "${hass_token}" ]]; then
         bashio::log.info "🔍 Using the API token of the Supervisor as the Home Assistant token"
-        hass_token=$(bashio::supervisor.info.api_token)
+        hass_token="${SUPERVISOR_TOKEN}"
     fi
 
     bashio::log.info "🔧 Using add-on configuration values instead of .env file"
