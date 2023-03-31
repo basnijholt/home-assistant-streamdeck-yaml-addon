@@ -32,14 +32,14 @@ map:
   - config:rw
 panel_icon: mdi:keyboard
 options:
-  streamdeck_dotenv: ""
-  hass_host: ""
-  hass_token: ""
   streamdeck_config: ""
   websocket_protocol: ""
+  hass_host: ""
+  hass_token: ""
+  streamdeck_dotenv: ""
 schema:
-  streamdeck_dotenv: str?
-  hass_host: str?
-  hass_token: password?
   streamdeck_config: str?
   websocket_protocol: str?
+  hass_host: str?
+  hass_token: password?
+  streamdeck_dotenv: str?
