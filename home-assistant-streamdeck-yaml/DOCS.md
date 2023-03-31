@@ -30,8 +30,8 @@ There are two ways to configure the add-on:
 An example add-on configuration using individual parameters is shown below:
 
 ```yaml
-hass_host: 192.168.1.2
-hass_token: YOUR_LONG_LIVED_ACCESS_TOKEN
+hass_host: 192.168.1.2  # leave blank to use the IP address of the host running the add-on
+hass_token: YOUR_LONG_LIVED_ACCESS_TOKEN  # leave blank to automatically get the token from the Supervisor API
 streamdeck_config: /config/streamdeck.yaml
 websocket_protocol: wss
 ```
