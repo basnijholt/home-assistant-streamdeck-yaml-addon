@@ -31,11 +31,13 @@ map:
   - config:rw
 panel_icon: mdi:keyboard
 options:
-  hass_host: 192.168.1.24
-  hass_token: '...'
-  streamdeck_config: /config/streamdeck.yaml
+  streamdeck_dotenv: ""
+  hass_host: ""
+  hass_token: ""
+  streamdeck_config: "/config/streamdeck.yaml"
   websocket_protocol: wss
 schema:
+  streamdeck_dotenv: str
   hass_host: str
   hass_token: str
   streamdeck_config: str

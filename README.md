@@ -23,7 +23,11 @@ To install the add-on, follow these steps:
 
 ## Add-on Configuration ⚙️
 
-An example add-on configuration is shown below:
+There are two ways to configure the add-on:
+
+### Option 1: Using individual configuration parameters
+
+An example add-on configuration using individual parameters is shown below:
 
 ```yaml
 hass_host: 192.168.1.2
@@ -38,6 +42,20 @@ The configuration file includes the following parameters:
 - `hass_token`: The long-lived access token for your Home Assistant instance.
 - `streamdeck_config`: The path to your streamdeck configuration YAML file.
 - `websocket_protocol`: The websocket protocol to use (`ws` for unsecured, `wss` for secured).
+
+### Option 2: Using a `.env` file for configuration
+
+An example add-on configuration using a `.env` file is shown below:
+
+```yaml
+streamdeck_dotenv: /config/streamdeck.env
+```
+
+The configuration file includes the following parameter:
+
+- `streamdeck_dotenv`: The path to your `.env` file containing the necessary configuration values (e.g., `HASS_HOST`, `HASS_TOKEN`, `STREAMDECK_CONFIG`, and `WEBSOCKET_PROTOCOL`).
+
+⚠️ Note that when specifying an `.env` file, you must include all of the configuration parameters in the `.env` file, and all the other configuration parameters are ignored.
 
 ## Stream Deck Configuration 🎮
 
