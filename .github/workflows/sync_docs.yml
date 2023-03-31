@@ -1,0 +1,24 @@
+name: Sync DOCS.md with README.md
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "README.md"
+
+jobs:
+  sync_docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Sync DOCS.md with README.md
+        run: |
+          cp README.md streamdeck-addon/DOCS.md
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add streamdeck-addon/DOCS.md
+          git commit -m "Sync DOCS.md with README.md" || true
+          git push || true
