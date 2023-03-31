@@ -37,8 +37,8 @@ options:
   streamdeck_config: ""
   websocket_protocol: ""
 schema:
-  streamdeck_dotenv: str
-  hass_host: str
-  hass_token: password
-  streamdeck_config: str
+  streamdeck_dotenv: str?
+  hass_host: str?
+  hass_token: password?
+  streamdeck_config: str?
   websocket_protocol: list(ws|wss)?
