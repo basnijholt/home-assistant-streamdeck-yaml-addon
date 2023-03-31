@@ -14,6 +14,8 @@ Check out the [GitHub repository](https://github.com/basnijholt/home-assistant-s
 - Template support for advanced customization 🔥
 - Automatically syncs state of `entity_id` to turn display on/off 💤
 
+https://user-images.githubusercontent.com/6897215/229247557-3f0a1dab-d9aa-4aa9-a262-74a27134aa88.mp4
+
 ## Installation :package:
 
 To install the add-on, follow these steps:
