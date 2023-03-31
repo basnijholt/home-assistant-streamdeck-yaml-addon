@@ -45,7 +45,7 @@ if [[ -n "${streamdeck_dotenv}" ]]; then
     sed -i "/^STREAMDECK_CONFIG/d" /app/.env
 else
     if [[ -z "${hass_host}" || -z "${hass_token}" || -z "${streamdeck_config}" || -z "${websocket_protocol}" ]]; then
-        bashio::log.red "❌ Error: Configuration incomplete. When using add-on configuration values, all options must be filled in."
+        bashio::log.red "❌ Error: Configuration incomplete. When not using the streamdeck_dotenv configuration option, all other options must be filled in."
         exit 1
     fi
 
