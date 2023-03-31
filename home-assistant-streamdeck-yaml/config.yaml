@@ -41,4 +41,4 @@ schema:
   hass_host: str?
   hass_token: password?
   streamdeck_config: str?
-  websocket_protocol: list(ws|wss)?
+  websocket_protocol: str?

@@ -12,7 +12,19 @@ streamdeck_config=$(bashio::config "streamdeck_config")
 websocket_protocol=$(bashio::config "websocket_protocol")
 streamdeck_dotenv=$(bashio::config "streamdeck_dotenv")
 
-if [[ -n "${streamdeck_dotenv}" && -e "${streamdeck_dotenv}" ]]; then
+if [[ -n "${streamdeck_dotenv}" ]]; then
+    if [[ -e "${streamdeck_dotenv}" ]]; then
+        bashio::log.info "🔍 Found the .env file: ${streamdeck_dotenv}"
+    else
+        bashio::log.red "❌ Error: The .env file does not exist: ${streamdeck_dotenv}"
+        exit 1
+    fi
+
+    if [[ -n "${hass_host}" || -n "${hass_token}" || -n "${streamdeck_config}" || -n "${websocket_protocol}" ]]; then
+        bashio::log.red "❌ Error: Configuration conflict. When using the .env file, all other configuration options must be empty."
+        exit 1
+    fi
+
     bashio::log.info "📁 Using the .env file from ${streamdeck_dotenv}"
     # Read STREAMDECK_CONFIG from .env file and copy the Stream Deck YAML configuration file to the add-on
     cp "${streamdeck_dotenv}" /app/.env
@@ -32,6 +44,11 @@ if [[ -n "${streamdeck_dotenv}" && -e "${streamdeck_dotenv}" ]]; then
     # Remove STREAMDECK_CONFIG line from /app/.env file
     sed -i "/^STREAMDECK_CONFIG/d" /app/.env
 else
+    if [[ -z "${hass_host}" || -z "${hass_token}" || -z "${streamdeck_config}" || -z "${websocket_protocol}" ]]; then
+        bashio::log.red "❌ Error: Configuration incomplete. When using add-on configuration values, all options must be filled in."
+        exit 1
+    fi
+
     bashio::log.info "🔧 Using add-on configuration values instead of .env file"
     {
         echo "HASS_HOST=$hass_host"
