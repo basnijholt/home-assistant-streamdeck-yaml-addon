@@ -27,19 +27,27 @@ There are two ways to configure the add-on:
 
 ### Option 1: Using individual configuration parameters
 
-An example add-on configuration using individual parameters is shown below:
+Depending on your setup, the required configuration parameters may vary:
+
+#### Connecting to Home Assistant on the **same machine** as the add-on:
 
 ```yaml
-hass_host: 192.168.1.2  # leave blank to use the IP address of the host running the add-on
-hass_token: YOUR_LONG_LIVED_ACCESS_TOKEN  # leave blank to automatically get the token from the Supervisor API
+streamdeck_config: /config/streamdeck.yaml
+```
+
+#### Connecting to Home Assistant on a **different machine**:
+
+```yaml
 streamdeck_config: /config/streamdeck.yaml
 websocket_protocol: wss
+hass_host: 192.168.1.2
+hass_token: YOUR_LONG_LIVED_ACCESS_TOKEN
 ```
 
 The configuration file includes the following parameters:
 
-- 📄 `streamdeck_config`: The path to your streamdeck configuration YAML file.
-- 🔒 `websocket_protocol`: The websocket protocol to use (`ws` for unsecured, `wss` for secured).
+- 📄 `streamdeck_config`: The path to your Stream Deck configuration YAML file.
+- 🔒 `websocket_protocol`: The WebSocket protocol to use (`ws` for unsecured, `wss` for secured).
 - 🏠 `hass_host` (optional): The IP address of your Home Assistant instance. If not provided, the add-on will automatically use the IP address of the host running the add-on.
 - 🔑 `hass_token` (optional): The long-lived access token for your Home Assistant instance. If not provided, the add-on will automatically use the Supervisor API token.
 
