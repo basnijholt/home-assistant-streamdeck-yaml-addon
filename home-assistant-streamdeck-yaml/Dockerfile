@@ -50,6 +50,9 @@ COPY --from=python-build /usr/local /usr/local
 COPY --from=python-build /app /app
 COPY --from=python-build /usr/lib /usr/lib
 
+# Make a link for the python3 binary
+RUN ln -s /usr/local/bin/python3 /usr/local/bin/python
+
 # Copy rootfs
 COPY rootfs /
 
