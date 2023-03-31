@@ -1,14 +1,5 @@
 ARG BUILD_FROM=ghcr.io/hassio-addons/base:13.2.0
-FROM python:alpine3.17 as python-build
-
-FROM ${BUILD_FROM}
-
-# Build arguments
-ARG BUILD_ARCH=amd64
-ARG BUILD_DATE
-ARG BUILD_REF
-ARG BUILD_VERSION
-ARG BUILD_FROM
+FROM python:3.11-alpine3.17 as python-build
 
 # Stream Deck dependencies
 # Install dependencies
@@ -46,6 +37,13 @@ RUN pip3 install -e "."
 RUN pip3 cache purge
 
 FROM ${BUILD_FROM}
+
+# Build arguments
+ARG BUILD_ARCH=amd64
+ARG BUILD_DATE
+ARG BUILD_REF
+ARG BUILD_VERSION
+ARG BUILD_FROM
 
 # Copy installed Python and libraries from the previous stage
 COPY --from=python-build /usr/local /usr/local
