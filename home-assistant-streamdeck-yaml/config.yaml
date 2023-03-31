@@ -5,6 +5,7 @@ slug: home-assistant-streamdeck-yaml
 description: home-assistant-streamdeck-yaml add-on by Bas Nijholt
 url: https://github.com/basnijholt/home-assistant-streamdeck-yaml-addon
 hassio_api: true
+init: false
 hassio_role: default
 arch:
   - aarch64

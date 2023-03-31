@@ -1,8 +1,9 @@
-# Home Assistant Stream Deck YAML Add-on 🎮
+# [Home Assistant Stream Deck YAML Add-on](https://github.com/basnijholt/home-assistant-streamdeck-yaml) 🎮
 
 This add-on allows you to control your Home Assistant instance via a Stream Deck, making it easier than ever to manage your smart home devices and scenes 🏠.
 The add-on is highly customizable and configured using YAML files.
 It runs on the same machine as Home Assistant and supports Linux-based supervised Home Assistant installations.
+Check out the [GitHub repository](https://github.com/basnijholt/home-assistant-streamdeck-yaml) for more details.
 
 ## Features 🌟
 - Easy to use 😄
