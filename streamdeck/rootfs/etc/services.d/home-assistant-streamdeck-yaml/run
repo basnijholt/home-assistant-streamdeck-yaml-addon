@@ -1,0 +1,11 @@
+#!/usr/bin/with-contenv bashio
+# ==============================================================================
+# Bas Nijholt's Hass.io Add-ons: home-assistant-streamdeck-yaml
+# Runs the home-assistant-streamdeck-yaml server
+# ==============================================================================
+
+bashio::log.info "Starting home-assistant-streamdeck-yaml..."
+
+# RUN home-assistant-streamdeck-yaml
+cd /opt || exit
+exec ./home-assistant-streamdeck-yaml
