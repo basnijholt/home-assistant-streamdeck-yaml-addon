@@ -56,6 +56,7 @@ The configuration file includes the following parameter:
 - `streamdeck_dotenv`: The path to your `.env` file containing the necessary configuration values (e.g., `HASS_HOST`, `HASS_TOKEN`, `STREAMDECK_CONFIG`, and `WEBSOCKET_PROTOCOL`).
 
 ⚠️ Note that when specifying an `.env` file, you must include all of the configuration parameters in the `.env` file, and all the other configuration parameters are ignored.
+Refer to the [`.env` file example](https://github.com/basnijholt/home-assistant-streamdeck-yaml/blob/main/.env.example) for more details.
 
 ## Stream Deck Configuration 🎮
 

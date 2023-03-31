@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - "README.md"
+      - "home-assistant-streamdeck-yaml/DOCS.md"
 
 jobs:
   sync_docs:
@@ -16,9 +17,9 @@ jobs:
 
       - name: Sync DOCS.md with README.md
         run: |
-          cp README.md streamdeck-addon/DOCS.md
+          cp README.md home-assistant-streamdeck-yaml/DOCS.md
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add streamdeck-addon/DOCS.md
+          git add home-assistant-streamdeck-yaml/DOCS.md
           git commit -m "Sync DOCS.md with README.md" || true
           git push || true
