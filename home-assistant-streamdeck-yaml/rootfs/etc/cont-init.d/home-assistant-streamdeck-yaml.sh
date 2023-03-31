@@ -46,6 +46,10 @@ if [[ -n "${streamdeck_dotenv}" ]]; then
 else
     # Use automatic values for hass_host and hass_token if they are empty
     if [[ -z "${hass_host}" ]]; then
+        if [[ -n "$websocket_protocol" ]]; then
+            bashio::log.red "❌ Error: Configuration conflict. When using the supervisor as the Home Assistant host, the websocket_protocol must be empty."
+            exit 1
+        fi
         hass_host="supervisor/core"
         websocket_protocol="ws"
         bashio::log.info "🔍 Using the host of the Supervisor as the Home Assistant host: ${hass_host} with protocol ${websocket_protocol}"
