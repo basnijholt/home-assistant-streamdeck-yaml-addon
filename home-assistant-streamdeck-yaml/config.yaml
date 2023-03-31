@@ -24,7 +24,7 @@ devices:
   - /dev/bus/usb
 map:
   - config:rw
-panel_icon: mdi:radiator
+panel_icon: mdi:keyboard
 options:
   hass_host: 192.168.1.24
   hass_token: '...'
