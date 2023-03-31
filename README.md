@@ -5,7 +5,7 @@ The add-on is highly customizable and configured using YAML files.
 It runs on the same machine as Home Assistant and supports Linux-based supervised Home Assistant installations.
 Check out the [GitHub repository](https://github.com/basnijholt/home-assistant-streamdeck-yaml) for more details.
 
-## Features 🌟
+## Features :star2:
 - Easy to use 😄
 - Highly customizable 🔧
 - Runs on the same machine as Home Assistant 🏠
@@ -14,14 +14,14 @@ Check out the [GitHub repository](https://github.com/basnijholt/home-assistant-s
 - Template support for advanced customization 🔥
 - Automatically syncs state of `entity_id` to turn display on/off 💤
 
-## Installation 📦
+## Installation :package:
 
 To install the add-on, follow these steps:
 
 1. Go to Supervisor -> Add-on store -> Add new repository by URL and fill in `https://github.com/basnijholt/home-assistant-streamdeck-yaml-addon`.
 2. Install the `home-assistant-streamdeck-yaml` add-on.
 
-## Add-on Configuration ⚙️
+## Add-on Configuration :gear:
 
 There are two ways to configure the add-on:
 
@@ -58,7 +58,7 @@ The configuration file includes the following parameter:
 ⚠️ Note that when specifying an `.env` file, you must include all of the configuration parameters in the `.env` file, and all the other configuration parameters are ignored.
 Refer to the [`.env` file example](https://github.com/basnijholt/home-assistant-streamdeck-yaml/blob/main/.env.example) for more details.
 
-## Stream Deck Configuration 🎮
+## Stream Deck Configuration :video_game:
 
 Create a `configuration.yaml` file for your Stream Deck buttons following the [example configuration](https://github.com/basnijholt/home-assistant-streamdeck-yaml/blob/main/configuration.yaml) from the `home-assistant-streamdeck-yaml` repository.
 
@@ -66,10 +66,10 @@ Create a `configuration.yaml` file for your Stream Deck buttons following the [e
 
 Once you have installed and configured the add-on, it will automatically run and display your configured buttons on your Stream Deck.
 
-## Support and Issues 🆘
+## Support and Issues :sos:
 
 If you have any issues or need support, please create an issue on the [GitHub repository](https://github.com/basnijholt/home-assistant-streamdeck-yaml-addon/issues).
 
-## License 📄
+## License :page_with_curl:
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
