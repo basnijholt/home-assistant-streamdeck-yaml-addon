@@ -38,10 +38,10 @@ websocket_protocol: wss
 
 The configuration file includes the following parameters:
 
-- `hass_host`: The IP address of your Home Assistant instance.
-- `hass_token`: The long-lived access token for your Home Assistant instance.
-- `streamdeck_config`: The path to your streamdeck configuration YAML file.
-- `websocket_protocol`: The websocket protocol to use (`ws` for unsecured, `wss` for secured).
+- 📄 `streamdeck_config`: The path to your streamdeck configuration YAML file.
+- 🔒 `websocket_protocol`: The websocket protocol to use (`ws` for unsecured, `wss` for secured).
+- 🏠 `hass_host` (optional): The IP address of your Home Assistant instance. If not provided, the add-on will automatically use the IP address of the host running the add-on.
+- 🔑 `hass_token` (optional): The long-lived access token for your Home Assistant instance. If not provided, the add-on will automatically use the Supervisor API token.
 
 ### Option 2: Using a `.env` file for configuration
 

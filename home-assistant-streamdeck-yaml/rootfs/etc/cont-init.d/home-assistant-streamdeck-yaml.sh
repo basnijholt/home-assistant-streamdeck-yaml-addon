@@ -44,9 +44,20 @@ if [[ -n "${streamdeck_dotenv}" ]]; then
     # Remove STREAMDECK_CONFIG line from /app/.env file
     sed -i "/^STREAMDECK_CONFIG/d" /app/.env
 else
-    if [[ -z "${hass_host}" || -z "${hass_token}" || -z "${streamdeck_config}" || -z "${websocket_protocol}" ]]; then
-        bashio::log.red "❌ Error: Configuration incomplete. When not using the streamdeck_dotenv configuration option, all other options must be filled in."
+    if [[ -z "${streamdeck_config}" || -z "${websocket_protocol}" ]]; then
+        bashio::log.red "❌ Error: Configuration incomplete. When not using the streamdeck_dotenv configuration option, streamdeck_config and websocket_protocol must be provided."
         exit 1
+    fi
+
+    # Use automatic values for hass_host and hass_token if they are empty
+    if [[ -z "${hass_host}" ]]; then
+        bashio::log.info "🔍 Using the host of the Supervisor as the Home Assistant host"
+        hass_host=$(bashio::supervisor.info.host)
+    fi
+
+    if [[ -z "${hass_token}" ]]; then
+        bashio::log.info "🔍 Using the API token of the Supervisor as the Home Assistant token"
+        hass_token=$(bashio::supervisor.info.api_token)
     fi
 
     bashio::log.info "🔧 Using add-on configuration values instead of .env file"
