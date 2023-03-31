@@ -1,4 +1,5 @@
-ARG BUILD_FROM=ghcr.io/hassio-addons/debian-base:6.2.4
+ARG BUILD_FROM=ghcr.io/hassio-addons/base:13.2.0
+FROM python:alpine3.17 as python-build
 
 FROM ${BUILD_FROM}
 
@@ -10,26 +11,26 @@ ARG BUILD_VERSION
 ARG BUILD_FROM
 
 # Stream Deck dependencies
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-        libusb-1.0-0 \
-        libusb-1.0-0-dev \
-        libhidapi-dev \
-        libffi-dev \
-        libcairo2-dev \
-        libxml2-dev \
-        libxslt1-dev \
-        libjpeg-dev \
-        libz-dev \
-        libfreetype6-dev \
-        libpng-dev \
-        gcc \
-        python3-dev \
-        python3-pip \
-        wget \
-        unzip && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/{cache,log}/*
+# Install dependencies
+RUN apk update && apk add --no-cache \
+    # Stream Deck dependencies
+    libusb \
+    libusb-dev \
+    hidapi-dev \
+    libffi-dev \
+    # Needed for cairosvg
+    cairo-dev \
+    # Needed for lxml
+    libxml2-dev libxslt-dev \
+    # Needed for Pillow
+    jpeg-dev zlib-dev freetype-dev libpng-dev \
+    # To download the repository
+    unzip wget \
+    # Needed for pip install
+    && apk add --virtual build-deps \
+    # General
+    gcc python3-dev musl-dev \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/{cache,log}/*
 
 # Clone the repository
 RUN wget https://github.com/basnijholt/home-assistant-streamdeck-yaml/archive/main.zip && \
@@ -39,12 +40,19 @@ RUN wget https://github.com/basnijholt/home-assistant-streamdeck-yaml/archive/ma
 WORKDIR /app
 
 # Install the required dependencies
-RUN pip3 install -U pip setuptools wheel
 RUN pip3 install -e "."
 
 # Purge the pip cache
 RUN pip3 cache purge
 
+FROM ${BUILD_FROM}
+
+# Copy installed Python and libraries from the previous stage
+COPY --from=python-build /usr/local /usr/local
+COPY --from=python-build /app /app
+COPY --from=python-build /usr/lib /usr/lib
+
+# Copy rootfs
 COPY rootfs /
 
 # Labels
