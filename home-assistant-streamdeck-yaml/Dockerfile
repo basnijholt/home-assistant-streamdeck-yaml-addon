@@ -18,7 +18,7 @@ RUN apk --no-cache add \
     # Needed for pip install
     && apk add --no-cache --virtual build-deps \
     # General
-    gcc python3-dev musl-dev \
+    gcc python3-dev musl-dev
 
 # Download and unzip the repository
 RUN apk --no-cache --virtual unzipper add unzip wget && \
@@ -33,7 +33,7 @@ WORKDIR /app
 
 # Install the required dependencies
 RUN pip3 install -e "." --no-cache-dir
-
+# hadolint ignore=DL3006
 FROM ${BUILD_FROM}
 
 # Build arguments

@@ -2,25 +2,29 @@
 name: Home Assistant Stream Deck
 version: dev
 slug: home-assistant-streamdeck-yaml
-description: |
-  This add-on allows you to control your Home Assistant instance via a Stream Deck, making it easier than ever to manage your smart home devices and scenes 🏠.
-  The add-on is highly customizable and configured using YAML files.
-  It runs on the same machine as Home Assistant and supports Linux-based supervised Home Assistant installations.
-  Check out the  basnijholt/home-assistant-streamdeck-yaml GitHub repository (https://github.com/basnijholt/home-assistant-streamdeck-yaml) for more details.
-  Also check out the add-on documentation (https://basnijholt.github.io/home-assistant-streamdeck-yaml-addon/) for add-on configuration details.
+description: >
+  This add-on allows you to control your Home Assistant
+  instance via a Stream Deck, making it easier than ever to
+  manage your smart home devices and scenes 🏠. The add-on is highly
+  customizable and configured using YAML files. It runs on the
+  same machine as Home Assistant and supports Linux-based supervised
+  Home Assistant installations. Check out the
+  basnijholt/home-assistant-streamdeck-yaml GitHub repository
+  (https://github.com/basnijholt/home-assistant-streamdeck-yaml) for
+  more details. Also check out the add-on documentation
+  (https://basnijholt.github.io/home-assistant-streamdeck-yaml-addon/) for
+  add-on configuration details.
 url: https://github.com/basnijholt/home-assistant-streamdeck-yaml-addon
 hassio_api: true
 homeassistant_api: true
 host_network: true
 init: false
-hassio_role: default
 arch:
   - aarch64
   - amd64
   - armhf
   - armv7
   - i386
-boot: auto
 ports:
   80/tcp: 80
   443/tcp: 443

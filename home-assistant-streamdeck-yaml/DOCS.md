@@ -8,6 +8,7 @@ Check out the [GitHub repository](https://github.com/basnijholt/home-assistant-s
 [![Open this add-on in your Home Assistant instance.][addon-badge]][addon]
 
 ## Features ⭐
+
 - Easy to use 😄
 - Highly customizable 🔧
 - Runs on the same machine as Home Assistant 🏠
