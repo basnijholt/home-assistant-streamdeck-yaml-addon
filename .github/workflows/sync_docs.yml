@@ -33,7 +33,7 @@ jobs:
           cp README.md home-assistant-streamdeck-yaml/DOCS.md
           python .github/workflows/replace_emojis.py
 
-      - name: Sync DOCS.md with README.md
+      - name: Commit changes
         run: |
           git add home-assistant-streamdeck-yaml/DOCS.md
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
