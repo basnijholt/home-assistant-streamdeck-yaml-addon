@@ -27,10 +27,11 @@ RUN apk --no-cache add \
     musl-dev=1.2.3-r4
 
 # Download and unzip the repository
-RUN apk --no-cache --virtual unzipper add unzip wget && \
-    wget -nv https://github.com/basnijholt/home-assistant-streamdeck-yaml/archive/main.zip && \
+RUN apk --no-cache --virtual unzipper add \
     unzip=6.0-r13 \
-    main.zip && \
+    wget=1.21.3-r2 && \
+    wget -nv https://github.com/basnijholt/home-assistant-streamdeck-yaml/archive/main.zip && \
+    unzip main.zip && \
     mv home-assistant-streamdeck-yaml-main /app && \
     rm main.zip && \
     apk del unzipper
