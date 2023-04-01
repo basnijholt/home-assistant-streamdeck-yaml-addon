@@ -2,7 +2,7 @@
 name: Home Assistant Stream Deck
 version: dev
 slug: home-assistant-streamdeck-yaml
-description: |
+description: >
   This add-on allows you to control your Home Assistant
   instance via a Stream Deck, making it easier than ever to
   manage your smart home devices and scenes 🏠. The add-on is highly
