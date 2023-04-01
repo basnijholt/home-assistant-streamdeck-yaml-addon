@@ -19,9 +19,22 @@ jobs:
           persist-credentials: false
           fetch-depth: 0
 
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+
+      - name: Install emoji library
+        run: |
+          pip install emoji
+
       - name: Sync DOCS.md with README.md
         run: |
           cp README.md home-assistant-streamdeck-yaml/DOCS.md
+          python .github/workflows/replace_emojis.py
+
+      - name: Sync DOCS.md with README.md
+        run: |
           git add home-assistant-streamdeck-yaml/DOCS.md
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
