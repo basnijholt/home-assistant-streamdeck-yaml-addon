@@ -1,4 +1,3 @@
-import re
 import emoji
 
 def replace_named_emojis(text):
