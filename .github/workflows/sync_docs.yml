@@ -1,5 +1,7 @@
+---
 name: Sync DOCS.md with README.md
 
+# yamllint disable-line rule:truthy
 on:
   push:
     branches:
