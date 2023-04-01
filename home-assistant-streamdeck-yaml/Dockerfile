@@ -3,7 +3,7 @@ FROM python:3.11-alpine3.17 as python-build
 
 # Stream Deck dependencies
 # Install dependencies
-RUN apk update && apk add --no-cache \
+RUN apk --no-cache add \
     # Stream Deck dependencies
     libusb \
     libusb-dev \
@@ -15,26 +15,24 @@ RUN apk update && apk add --no-cache \
     libxml2-dev libxslt-dev \
     # Needed for Pillow
     jpeg-dev zlib-dev freetype-dev libpng-dev \
-    # To download the repository
-    unzip wget \
     # Needed for pip install
-    && apk add --virtual build-deps \
+    && apk add --no-cache --virtual build-deps \
     # General
     gcc python3-dev musl-dev \
-    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/{cache,log}/*
 
-# Clone the repository
-RUN wget https://github.com/basnijholt/home-assistant-streamdeck-yaml/archive/main.zip && \
-    unzip main.zip && mv home-assistant-streamdeck-yaml-main /app
+# Download and unzip the repository
+RUN apk --no-cache --virtual unzipper add unzip wget && \
+    wget -nv https://github.com/basnijholt/home-assistant-streamdeck-yaml/archive/main.zip && \
+    unzip main.zip && \
+    mv home-assistant-streamdeck-yaml-main /app && \
+    rm main.zip && \
+    apk del unzipper
 
 # Set the working directory to the repository
 WORKDIR /app
 
 # Install the required dependencies
-RUN pip3 install -e "."
-
-# Purge the pip cache
-RUN pip3 cache purge
+RUN pip3 install -e "." --no-cache-dir
 
 FROM ${BUILD_FROM}
 
