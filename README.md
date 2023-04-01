@@ -20,6 +20,15 @@ https://user-images.githubusercontent.com/6897215/229247557-3f0a1dab-d9aa-4aa9-a
 
 To install the add-on, follow these steps:
 
+1. Click the Home Assistant My button below to open the add-on on your Home
+   Assistant instance.
+
+   [![Open this add-on in your Home Assistant instance.][addon-badge]][addon]
+
+2. Install the `home-assistant-streamdeck-yaml` add-on.
+
+or
+
 1. Go to Supervisor -> Add-on store -> Add new repository by URL and fill in `https://github.com/basnijholt/home-assistant-streamdeck-yaml-addon`.
 2. Install the `home-assistant-streamdeck-yaml` add-on.
 
@@ -83,3 +92,6 @@ If you have any issues or need support, please create an issue on the [GitHub re
 ## License :page_with_curl:
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+[addon-badge]: https://my.home-assistant.io/badges/supervisor_addon.svg
+[addon]: https://my.home-assistant.io/redirect/supervisor_addon/?addon=dc473884_home-assistant-streamdeck-yaml&repository_url=https%3A%2F%2Fgithub.com%2Fbasnijholt%2Fhome-assistant-streamdeck-yaml-addon
