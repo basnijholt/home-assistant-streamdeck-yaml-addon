@@ -5,7 +5,7 @@ The add-on is highly customizable and configured using YAML files.
 It runs on the same machine as Home Assistant and supports Linux-based supervised Home Assistant installations.
 Check out the [GitHub repository](https://github.com/basnijholt/home-assistant-streamdeck-yaml) for more details.
 
-## Features ⭐
+## Features :star2:
 - Easy to use 😄
 - Highly customizable 🔧
 - Runs on the same machine as Home Assistant 🏠
