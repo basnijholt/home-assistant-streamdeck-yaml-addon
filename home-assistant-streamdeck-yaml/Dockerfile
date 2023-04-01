@@ -33,7 +33,7 @@ WORKDIR /app
 
 # Install the required dependencies
 RUN pip3 install -e "." --no-cache-dir
-
+# hadolint ignore=DL3006
 FROM ${BUILD_FROM}
 
 # Build arguments
