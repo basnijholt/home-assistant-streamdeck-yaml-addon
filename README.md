@@ -22,7 +22,7 @@ https://user-images.githubusercontent.com/6897215/229247557-3f0a1dab-d9aa-4aa9-a
 
 To install the add-on, follow these steps:
 
-1. Click the Home Assistant My button below to open the add-on on your Home
+1. Click the Home Assistant "My ADD-ON" button below to open the add-on on your Home
    Assistant instance.
 
    [![Open this add-on in your Home Assistant instance.][addon-badge]][addon]
