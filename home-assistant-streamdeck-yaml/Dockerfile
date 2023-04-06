@@ -23,7 +23,7 @@ RUN apk --no-cache add \
     && apk add --no-cache --virtual build-deps \
     # General
     gcc=12.2.1_git20220924-r4 \
-    python3-dev=3.10.10-r0 \
+    python3-dev=3.10.11-r0 \
     musl-dev=1.2.3-r4
 
 # Download and unzip the repository
