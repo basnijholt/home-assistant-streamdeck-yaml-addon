@@ -105,6 +105,8 @@ jobs:
         uses: actions/checkout@v3
       - name: 🚀 Run YAMLLint
         uses: frenck/action-yamllint@v1.4
+        with:
+          path: "home-assistant-streamdeck-yaml/"
 
   lint-prettier:
     name: Prettier
