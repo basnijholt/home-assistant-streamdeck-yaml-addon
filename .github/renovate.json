@@ -51,7 +51,7 @@
     },
     {
       "fileMatch": ["/config.yaml$"],
-      "matchStrings": ["^version:\\s+\"(?<currentValue>.*?)\""],
+      "matchStrings": ["^version:\\s+\"(?<currentValue>.+?)\""],
       "datasourceTemplate": "pypi",
       "depNameTemplate": "home-assistant-streamdeck-yaml"
     }
