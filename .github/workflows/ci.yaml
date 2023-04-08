@@ -11,7 +11,7 @@ on:
       - synchronize
   workflow_dispatch:
 
-jobs:
+jobs: 
   workflows:
     uses: basnijholt/workflows/.github/workflows/addon-ci.yaml@main
     with:
