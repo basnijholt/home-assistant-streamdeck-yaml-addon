@@ -5,6 +5,9 @@
   "labels": ["dependencies", "no-stale"],
   "commitMessagePrefix": "⬆️",
   "commitMessageTopic": "{{depName}}",
+  "prBodyDefinitions": {
+    "Release": "yes"
+  },
   "regexManagers": [
     {
       "fileMatch": ["/Dockerfile$", "/build.yaml$"],
