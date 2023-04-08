@@ -1,4 +1,6 @@
 ARG BUILD_FROM=ghcr.io/hassio-addons/base:13.2.0
+ARG VERSION=2023.4.2
+
 FROM python:3.11-alpine3.17 as python-build
 
 # Stream Deck dependencies
@@ -31,10 +33,10 @@ RUN apk --no-cache add \
 RUN apk --no-cache --virtual unzipper add \
     unzip=6.0-r13 && \
     wget=1.21.3-r2 && \
-    wget -nv https://github.com/basnijholt/home-assistant-streamdeck-yaml/archive/main.zip && \
-    unzip main.zip && \
-    mv home-assistant-streamdeck-yaml-main /app && \
-    rm main.zip && \
+    wget -nv https://github.com/basnijholt/home-assistant-streamdeck-yaml/archive/refs/tags/${TAG}.zip && \
+    unzip ${TAG}.zip && \
+    mv home-assistant-streamdeck-yaml-${TAG} /app && \
+    rm ${TAG}.zip && \
     apk del unzipper
 
 # Set the working directory to the repository
