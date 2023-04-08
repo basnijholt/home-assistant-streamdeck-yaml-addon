@@ -44,11 +44,8 @@
       "depNameTemplate": "alpine_3_17/{{package}}"
     },
     {
-      "fileMatch": ["/Dockerfile$", "/config.yaml$"],
-      "matchStrings": [
-        "ARG VERSION=(?<currentValue>.+?)\\s+",
-        "^version:\\s+(?<currentValue>.+)$"
-      ],
+      "fileMatch": ["/Dockerfile$"],
+      "matchStrings": ["ARG VERSION=(?<currentValue>.+?)\\s+"],
       "datasourceTemplate": "pypi",
       "depNameTemplate": "home-assistant-streamdeck-yaml"
     }
