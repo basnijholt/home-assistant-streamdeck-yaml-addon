@@ -48,6 +48,12 @@
       "matchStrings": ["ARG VERSION=(?<currentValue>.+?)\\s+"],
       "datasourceTemplate": "pypi",
       "depNameTemplate": "home-assistant-streamdeck-yaml"
+    },
+    {
+      "fileMatch": ["/config.yaml$"],
+      "matchStrings": ["^version:\\s+\"(?<currentValue>.+?)\""],
+      "datasourceTemplate": "pypi",
+      "depNameTemplate": "home-assistant-streamdeck-yaml"
     }
   ],
   "packageRules": [
@@ -67,6 +73,16 @@
     {
       "groupName": "Add-on base image",
       "matchDatasources": ["docker"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true
+    },
+    {
+      "matchManagers": ["github-actions"],
+      "addLabels": ["github_actions"],
+      "rangeStrategy": "pin"
+    },
+    {
+      "matchManagers": ["github-actions"],
       "matchUpdateTypes": ["minor", "patch"],
       "automerge": true
     }

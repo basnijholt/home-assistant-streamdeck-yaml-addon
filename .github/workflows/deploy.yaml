@@ -18,3 +18,5 @@ jobs:
     secrets:
       CAS_API_KEY: ${{ secrets.CAS_API_KEY }}
       DISPATCH_TOKEN: ${{ secrets.DISPATCH_TOKEN }}
+    with:
+      repository: home-assistant-addons
