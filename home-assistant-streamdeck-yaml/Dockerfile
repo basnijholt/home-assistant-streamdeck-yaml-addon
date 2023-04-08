@@ -1,5 +1,4 @@
 ARG BUILD_FROM=ghcr.io/hassio-addons/base:13.2.0
-ARG VERSION=2023.4.2
 
 FROM python:3.11-alpine3.17 as python-build
 
@@ -29,21 +28,22 @@ RUN apk --no-cache add \
     musl-dev=1.2.3-r4
 
 # Download and unzip the repository
+ARG VERSION=2023.4.2
 # hadolint ignore=SC2034
 RUN apk --no-cache --virtual unzipper add \
     unzip=6.0-r13 && \
     wget=1.21.3-r2 && \
-    wget -nv https://github.com/basnijholt/home-assistant-streamdeck-yaml/archive/refs/tags/${TAG}.zip && \
-    unzip ${TAG}.zip && \
-    mv home-assistant-streamdeck-yaml-${TAG} /app && \
-    rm ${TAG}.zip && \
+    wget -nv https://github.com/basnijholt/home-assistant-streamdeck-yaml/archive/refs/tags/${VERSION}.zip && \
+    unzip ${VERSION}.zip && \
+    mv home-assistant-streamdeck-yaml-${VERSION} /app && \
+    rm ${VERSION}.zip && \
     apk del unzipper
 
 # Set the working directory to the repository
 WORKDIR /app
 
 # Install the required dependencies
-RUN pip3 install -e "." --no-cache-dir
+RUN SETUPTOOLS_SCM_PRETEND_VERSION=${VERSION} pip3 install -e "." --no-cache-dir
 # hadolint ignore=DL3006
 FROM ${BUILD_FROM}
 
