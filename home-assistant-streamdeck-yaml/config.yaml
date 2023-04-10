@@ -1,6 +1,6 @@
 ---
 name: Home Assistant Stream Deck
-version: "2023.4.19"
+version: "2023.4.21"
 slug: home-assistant-streamdeck-yaml
 description: >
   This add-on allows you to control your Home Assistant
