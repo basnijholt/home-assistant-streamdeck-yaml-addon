@@ -1,4 +1,4 @@
-ARG BUILD_FROM=ghcr.io/hassio-addons/base:13.2.0
+ARG BUILD_FROM=ghcr.io/hassio-addons/base:13.2.1
 
 FROM python:3.11-alpine3.17 as python-build
 
