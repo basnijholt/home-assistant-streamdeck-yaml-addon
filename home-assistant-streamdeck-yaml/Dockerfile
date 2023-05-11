@@ -32,7 +32,7 @@ ARG VERSION=2023.4.21
 # hadolint ignore=SC2034
 RUN apk --no-cache --virtual unzipper add \
     unzip=6.0-r13 && \
-    wget=1.21.3-r2 && \
+    wget=1.21.4-r0 && \
     wget -nv https://github.com/basnijholt/home-assistant-streamdeck-yaml/archive/refs/tags/${VERSION}.zip && \
     unzip ${VERSION}.zip && \
     mv home-assistant-streamdeck-yaml-${VERSION} /app && \
