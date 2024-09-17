@@ -19,7 +19,7 @@ RUN apk --no-cache add \
     jpeg-dev=9e-r0 \
     zlib-dev=1.2.13-r0 \
     freetype-dev=2.12.1-r0 \
-    libpng-dev=1.6.39-r0 \
+    libpng-dev=1.6.44-r0 \
     # Needed for pip install
     && apk add --no-cache --virtual build-deps \
     # General
