@@ -30,14 +30,18 @@ RUN apk --no-cache add \
 # Download and unzip the repository
 ARG VERSION=2025.4.2
 # hadolint ignore=SC2034
-RUN apk --no-cache --virtual unzipper add \
-    unzip && \
+RUN apk --no-cache --virtual .download-deps add \
+    unzip \
     wget && \
-    wget -nv https://github.com/basnijholt/home-assistant-streamdeck-yaml/archive/refs/tags/v${VERSION}.zip && \
+    echo "Downloading version ${VERSION}..." && \
+    wget -nv https://github.com/basnijholt/home-assistant-streamdeck-yaml/archive/refs/tags/v${VERSION}.zip -O v${VERSION}.zip && \
+    echo "Unzipping..." && \
     unzip v${VERSION}.zip && \
+    echo "Moving files..." && \
     mv home-assistant-streamdeck-yaml-${VERSION} /app && \
+    echo "Cleaning up..." && \
     rm v${VERSION}.zip && \
-    apk del unzipper
+    apk del .download-deps
 
 # Set the working directory to the repository
 WORKDIR /app
