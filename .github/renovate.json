@@ -8,8 +8,9 @@
   "prBodyDefinitions": {
     "Release": "yes"
   },
-  "regexManagers": [
+  "customManagers": [
     {
+      "customType": "regex",
       "fileMatch": ["/Dockerfile$", "/build.yaml$"],
       "matchStringsStrategy": "any",
       "matchStrings": [
@@ -19,6 +20,7 @@
       "datasourceTemplate": "docker"
     },
     {
+      "customType": "regex",
       "fileMatch": ["/Dockerfile$"],
       "matchStrings": [
         "ARG HA_CLI_VERSION=[\"']?(?<currentValue>.+?)[\"']?\\s+"
@@ -28,12 +30,14 @@
       "versioningTemplate": "loose"
     },
     {
+      "customType": "regex",
       "fileMatch": ["/Dockerfile$"],
       "matchStrings": ["ARG TTYD_VERSION=[\"']?(?<currentValue>.+?)[\"']?\\s+"],
       "datasourceTemplate": "github-tags",
       "depNameTemplate": "tsl0922/ttyd"
     },
     {
+      "customType": "regex",
       "fileMatch": ["/Dockerfile$"],
       "matchStringsStrategy": "any",
       "matchStrings": [
@@ -44,12 +48,14 @@
       "depNameTemplate": "alpine_3_17/{{package}}"
     },
     {
+      "customType": "regex",
       "fileMatch": ["/Dockerfile$"],
       "matchStrings": ["ARG VERSION=(?<currentValue>.+?)\\s+"],
       "datasourceTemplate": "pypi",
       "depNameTemplate": "home-assistant-streamdeck-yaml"
     },
     {
+      "customType": "regex",
       "fileMatch": ["/config.yaml$"],
       "matchStrings": ["version:\\s+[\"']?(?<currentValue>.+?)[\"']?\\s+"],
       "datasourceTemplate": "pypi",
