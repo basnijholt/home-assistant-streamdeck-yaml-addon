@@ -6,38 +6,42 @@ FROM python:3.12-alpine3.21 as python-build
 # Install dependencies
 RUN apk --no-cache add \
     # Stream Deck dependencies
-    libusb=1.0.26-r0 \
-    libusb-dev=1.0.26-r0 \
-    hidapi-dev=0.12.0-r1 \
-    libffi-dev=3.4.4-r0 \
+    libusb=1.0.27-r0 \
+    libusb-dev=1.0.27-r0 \
+    hidapi-dev=0.14.0-r0 \
+    libffi-dev=3.4.7-r0 \
     # Needed for cairosvg
-    cairo-dev=1.17.6-r3 \
+    cairo-dev=1.18.2-r1 \
     # Needed for lxml
-    libxml2-dev=2.10.4-r0 \
-    libxslt-dev=1.1.37-r1 \
+    libxml2-dev=2.13.4-r5 \
+    libxslt-dev=1.1.42-r2 \
     # Needed for Pillow
-    jpeg-dev=9e-r0 \
-    zlib-dev=1.2.13-r0 \
-    freetype-dev=2.12.1-r0 \
-    libpng-dev=1.6.44-r0 \
+    jpeg-dev=9f-r0 \
+    zlib-dev=1.3.1-r2 \
+    freetype-dev=2.13.3-r0 \
+    libpng-dev=1.6.47-r0 \
     # Needed for pip install
     && apk add --no-cache --virtual build-deps \
     # General
-    gcc=12.2.1_git20220924-r4 \
-    python3-dev=3.10.15-r0 \
-    musl-dev=1.2.3-r6
+    gcc=14.2.0-r4 \
+    python3-dev=3.12.10-r0 \
+    musl-dev=1.2.5-r9
 
 # Download and unzip the repository
 ARG VERSION=2025.4.2
 # hadolint ignore=SC2034
-RUN apk --no-cache --virtual unzipper add \
-    unzip=6.0-r13 && \
-    wget=1.21.4-r0 && \
-    wget -nv https://github.com/basnijholt/home-assistant-streamdeck-yaml/archive/refs/tags/v${VERSION}.zip && \
+RUN apk --no-cache --virtual .download-deps add \
+    unzip=6.0-r15 \
+    wget=1.25.0-r0 && \
+    echo "Downloading version ${VERSION}..." && \
+    wget -nv https://github.com/basnijholt/home-assistant-streamdeck-yaml/archive/refs/tags/v${VERSION}.zip -O v${VERSION}.zip && \
+    echo "Unzipping..." && \
     unzip v${VERSION}.zip && \
+    echo "Moving files..." && \
     mv home-assistant-streamdeck-yaml-${VERSION} /app && \
+    echo "Cleaning up..." && \
     rm v${VERSION}.zip && \
-    apk del unzipper
+    apk del .download-deps
 
 # Set the working directory to the repository
 WORKDIR /app
