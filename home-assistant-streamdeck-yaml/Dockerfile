@@ -28,7 +28,7 @@ RUN apk --no-cache add \
     musl-dev=1.2.5-r9
 
 # Download and unzip the repository
-ARG VERSION=2025.4.3
+ARG VERSION=2025.7.0
 # hadolint ignore=SC2034
 RUN apk --no-cache --virtual .download-deps add \
     unzip=6.0-r15 \
