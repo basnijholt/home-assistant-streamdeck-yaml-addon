@@ -6,33 +6,33 @@ FROM python:3.13-alpine3.21 as python-build
 # Install dependencies
 RUN apk --no-cache add \
     # Stream Deck dependencies
-    libusb \
-    libusb-dev \
-    hidapi-dev \
-    libffi-dev \
+    libusb=1.0.27-r0 \
+    libusb-dev=1.0.27-r0 \
+    hidapi-dev=0.14.0-r0 \
+    libffi-dev=3.4.7-r0 \
     # Needed for cairosvg
-    cairo-dev \
+    cairo-dev=1.18.4-r0 \
     # Needed for lxml
-    libxml2-dev \
-    libxslt-dev \
+    libxml2-dev=2.13.4-r6 \
+    libxslt-dev=1.1.42-r2 \
     # Needed for Pillow
-    jpeg-dev \
-    zlib-dev \
-    freetype-dev \
-    libpng-dev \
+    jpeg-dev=9f-r0 \
+    zlib-dev=1.3.1-r2 \
+    freetype-dev=2.13.3-r0 \
+    libpng-dev=1.6.47-r0 \
     # Needed for pip install
     && apk add --no-cache --virtual build-deps \
     # General
-    gcc \
-    python3-dev \
-    musl-dev
+    gcc=14.2.0-r4 \
+    python3-dev=3.12.11-r0 \
+    musl-dev=1.2.5-r9
 
 # Download and unzip the repository
 ARG VERSION=2025.4.3
 # hadolint ignore=SC2034
 RUN apk --no-cache --virtual .download-deps add \
-    unzip \
-    wget && \
+    unzip=6.0-r15 \
+    wget=1.25.0-r0 && \
     echo "Downloading version ${VERSION}..." && \
     wget -nv https://github.com/basnijholt/home-assistant-streamdeck-yaml/archive/refs/tags/v${VERSION}.zip -O v${VERSION}.zip && \
     echo "Unzipping..." && \
