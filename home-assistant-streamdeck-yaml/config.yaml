@@ -31,7 +31,11 @@ ports:
 ports_description:
   80/tcp: home-assistant-streamdeck-yaml WebSocket port
   443/tcp: home-assistant-streamdeck-yaml WebSocket SSL port
+apparmor: true
 usb: true
+udev: true
+privileged:
+  - SYS_RAWIO
 devices:
   - /dev/bus/usb
 map:
