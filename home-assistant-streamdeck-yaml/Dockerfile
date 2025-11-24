@@ -6,26 +6,26 @@ FROM python:3.14-alpine3.21 as python-build
 # Install dependencies
 RUN apk --no-cache add \
     # Stream Deck dependencies
-    libusb=1.0.27-r0 \
-    libusb-dev=1.0.27-r0 \
-    hidapi-dev=0.14.0-r0 \
-    libffi-dev=3.4.7-r0 \
+    libusb \
+    libusb-dev \
+    hidapi-dev \
+    libffi-dev \
     # Needed for cairosvg
-    cairo-dev=1.18.4-r0 \
+    cairo-dev \
     # Needed for lxml
-    libxml2-dev=2.13.4-r6 \
-    libxslt-dev=1.1.42-r2 \
+    libxml2-dev \
+    libxslt-dev \
     # Needed for Pillow
-    jpeg-dev=9f-r0 \
-    zlib-dev=1.3.1-r2 \
-    freetype-dev=2.13.3-r0 \
-    libpng-dev=1.6.47-r0 \
+    jpeg-dev \
+    zlib-dev \
+    freetype-dev \
+    libpng-dev \
     # Needed for pip install
     && apk add --no-cache --virtual build-deps \
     # General
-    gcc=14.2.0-r4 \
-    python3-dev=3.12.11-r0 \
-    musl-dev=1.2.5-r9
+    gcc \
+    python3-dev \
+    musl-dev
 
 # Download and unzip the repository
 ARG VERSION=2025.7.0
