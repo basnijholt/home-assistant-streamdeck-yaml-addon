@@ -1,7 +1,7 @@
 ARG BUILD_FROM=ghcr.io/hassio-addons/base:17.2.5
 
 # Build stage - compile Python packages
-FROM python:3.12-alpine3.21 as python-build
+FROM python:3.14-alpine3.21 as python-build
 
 # Install build dependencies (without strict version pinning to avoid build failures)
 RUN apk --no-cache add \
@@ -25,6 +25,9 @@ RUN apk --no-cache add \
     python3-dev \
     musl-dev
 
+# Install uv
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
+
 # Download and unzip the repository
 ARG VERSION=2025.7.0
 RUN apk --no-cache --virtual .download-deps add \
@@ -43,10 +46,10 @@ RUN apk --no-cache --virtual .download-deps add \
 # Set the working directory to the repository
 WORKDIR /app
 
-# Install the required dependencies into a virtual environment
-RUN python -m venv /opt/venv
-ENV PATH="/opt/venv/bin:$PATH"
-RUN SETUPTOOLS_SCM_PRETEND_VERSION=${VERSION} pip install --no-cache-dir -e "."
+# Install the required dependencies using uv
+ENV UV_COMPILE_BYTECODE=1
+ENV UV_LINK_MODE=copy
+RUN SETUPTOOLS_SCM_PRETEND_VERSION=${VERSION} uv pip install --system --no-cache -e "."
 
 # Final stage - runtime image
 # hadolint ignore=DL3006
@@ -62,7 +65,6 @@ ARG BUILD_FROM
 # Install runtime dependencies in the final image
 RUN apk --no-cache add \
     python3 \
-    py3-pip \
     # Stream Deck runtime dependencies
     libusb \
     hidapi \
@@ -79,12 +81,15 @@ RUN apk --no-cache add \
     freetype \
     libpng
 
-# Copy Python virtual environment and app from build stage
-COPY --from=python-build /opt/venv /opt/venv
+# Copy Python and installed packages from build stage
+COPY --from=python-build /usr/local/lib/python3.14 /usr/local/lib/python3.14
+COPY --from=python-build /usr/local/bin/python3.14 /usr/local/bin/python3.14
+COPY --from=python-build /usr/local/bin/python3 /usr/local/bin/python3
+COPY --from=python-build /usr/local/bin/home-assistant-streamdeck-yaml /usr/local/bin/home-assistant-streamdeck-yaml
 COPY --from=python-build /app /app
 
-# Set up PATH to use the virtual environment
-ENV PATH="/opt/venv/bin:$PATH"
+# Set up Python path
+ENV PATH="/usr/local/bin:$PATH"
 
 # Copy rootfs
 COPY rootfs /
