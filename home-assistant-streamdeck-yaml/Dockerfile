@@ -2,10 +2,6 @@ ARG BUILD_FROM=ghcr.io/hassio-addons/base:17.2.5
 
 FROM python:3.14-alpine3.21 as python-build
 
-# Install uv
-# hadolint ignore=DL3022
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
-
 # Stream Deck dependencies
 # Install dependencies (without version pinning to avoid build failures when Alpine updates)
 # hadolint ignore=DL3018
@@ -51,8 +47,8 @@ RUN apk --no-cache --virtual .download-deps add \
 # Set the working directory to the repository
 WORKDIR /app
 
-# Install the required dependencies using uv
-RUN SETUPTOOLS_SCM_PRETEND_VERSION=${VERSION} uv pip install --system --no-cache -e "."
+# Install the required dependencies
+RUN SETUPTOOLS_SCM_PRETEND_VERSION=${VERSION} pip install --no-cache-dir -e "."
 
 # hadolint ignore=DL3006
 FROM ${BUILD_FROM}
