@@ -33,7 +33,7 @@ RUN apk --no-cache add \
 
 # Download and unzip the repository
 ARG VERSION=2025.7.0
-# hadolint ignore=SC2034
+# hadolint ignore=SC2034,DL3018
 RUN apk --no-cache --virtual .download-deps add \
     unzip \
     wget && \
