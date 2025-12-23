@@ -7,7 +7,7 @@ ARG BUILD_ARCH=amd64
 ARG BUILD_DATE
 ARG BUILD_REF
 ARG BUILD_VERSION
-ARG VERSION=2025.12.1
+ARG VERSION=2025.12.4
 
 # Install runtime dependencies and build dependencies
 # hadolint ignore=DL3018,DL3003
