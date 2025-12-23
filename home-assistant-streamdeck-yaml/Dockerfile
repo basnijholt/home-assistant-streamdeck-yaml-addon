@@ -1,5 +1,5 @@
-# hadolint ignore=DL3006
 ARG BUILD_FROM=ghcr.io/hassio-addons/base:17.2.5
+# hadolint ignore=DL3006
 FROM ${BUILD_FROM}
 
 # Build arguments
@@ -10,7 +10,7 @@ ARG BUILD_VERSION
 ARG VERSION=2025.7.0
 
 # Install runtime dependencies and build dependencies
-# hadolint ignore=DL3018
+# hadolint ignore=DL3018,DL3003
 RUN apk --no-cache add \
     # Python
     python3 \
