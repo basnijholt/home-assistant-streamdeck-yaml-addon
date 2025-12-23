@@ -6,7 +6,8 @@ FROM python:3.14-alpine3.21 as python-build
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 
 # Stream Deck dependencies
-# Install dependencies (without version pinning to avoid build failures)
+# Install dependencies (without version pinning to avoid build failures when Alpine updates)
+# hadolint ignore=DL3018
 RUN apk --no-cache add \
     # Stream Deck dependencies
     libusb \
@@ -63,6 +64,7 @@ ARG BUILD_VERSION
 ARG BUILD_FROM
 
 # Install runtime dependencies in the final image (not copied from build stage to avoid library conflicts)
+# hadolint ignore=DL3018
 RUN apk --no-cache add \
     python3 \
     libusb \
