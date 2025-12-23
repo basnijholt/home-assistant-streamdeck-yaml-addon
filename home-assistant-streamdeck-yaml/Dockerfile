@@ -1,9 +1,12 @@
 ARG BUILD_FROM=ghcr.io/hassio-addons/base:17.2.5
 
-# Build stage - compile Python packages
 FROM python:3.14-alpine3.21 as python-build
 
-# Install build dependencies (without strict version pinning to avoid build failures)
+# Install uv
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
+
+# Stream Deck dependencies
+# Install dependencies (without version pinning to avoid build failures)
 RUN apk --no-cache add \
     # Stream Deck dependencies
     libusb \
@@ -20,16 +23,16 @@ RUN apk --no-cache add \
     zlib-dev \
     freetype-dev \
     libpng-dev \
-    # Build tools
+    # Needed for pip install
+    && apk add --no-cache --virtual build-deps \
+    # General
     gcc \
     python3-dev \
     musl-dev
 
-# Install uv
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
-
 # Download and unzip the repository
 ARG VERSION=2025.7.0
+# hadolint ignore=SC2034
 RUN apk --no-cache --virtual .download-deps add \
     unzip \
     wget && \
@@ -47,11 +50,8 @@ RUN apk --no-cache --virtual .download-deps add \
 WORKDIR /app
 
 # Install the required dependencies using uv
-ENV UV_COMPILE_BYTECODE=1
-ENV UV_LINK_MODE=copy
 RUN SETUPTOOLS_SCM_PRETEND_VERSION=${VERSION} uv pip install --system --no-cache -e "."
 
-# Final stage - runtime image
 # hadolint ignore=DL3006
 FROM ${BUILD_FROM}
 
@@ -62,34 +62,24 @@ ARG BUILD_REF
 ARG BUILD_VERSION
 ARG BUILD_FROM
 
-# Install runtime dependencies in the final image
+# Install runtime dependencies in the final image (not copied from build stage to avoid library conflicts)
 RUN apk --no-cache add \
     python3 \
-    # Stream Deck runtime dependencies
     libusb \
     hidapi \
     libffi \
-    # Needed for cairosvg
     cairo \
     cairo-gobject \
-    # Needed for lxml
     libxml2 \
     libxslt \
-    # Needed for Pillow
     libjpeg-turbo \
     zlib \
     freetype \
     libpng
 
-# Copy Python and installed packages from build stage
-COPY --from=python-build /usr/local/lib/python3.14 /usr/local/lib/python3.14
-COPY --from=python-build /usr/local/bin/python3.14 /usr/local/bin/python3.14
-COPY --from=python-build /usr/local/bin/python3 /usr/local/bin/python3
-COPY --from=python-build /usr/local/bin/home-assistant-streamdeck-yaml /usr/local/bin/home-assistant-streamdeck-yaml
+# Copy installed Python and app from the previous stage
+COPY --from=python-build /usr/local /usr/local
 COPY --from=python-build /app /app
-
-# Set up Python path
-ENV PATH="/usr/local/bin:$PATH"
 
 # Copy rootfs
 COPY rootfs /
