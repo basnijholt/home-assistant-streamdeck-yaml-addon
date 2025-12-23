@@ -3,6 +3,7 @@ ARG BUILD_FROM=ghcr.io/hassio-addons/base:17.2.5
 FROM python:3.14-alpine3.21 as python-build
 
 # Install uv
+# hadolint ignore=DL3022
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 
 # Stream Deck dependencies
