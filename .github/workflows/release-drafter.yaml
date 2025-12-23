@@ -1,12 +1,30 @@
 ---
 name: Release Drafter
 
-# yamllint disable-line rule:truthy
 on:
   push:
     branches:
       - main
 
 jobs:
-  workflows:
-    uses: hassio-addons/workflows/.github/workflows/release-drafter.yaml@main
+  draft-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get version from config.yaml
+        id: version
+        run: |
+          VERSION=$(grep '^version:' home-assistant-streamdeck-yaml/config.yaml | sed 's/version: *"\([^"]*\)"/\1/')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Detected version: $VERSION"
+
+      - name: Draft Release
+        uses: release-drafter/release-drafter@v6
+        with:
+          name: "v${{ steps.version.outputs.version }}"
+          tag: "v${{ steps.version.outputs.version }}"
+          version: ${{ steps.version.outputs.version }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
