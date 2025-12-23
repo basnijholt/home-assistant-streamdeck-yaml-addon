@@ -1,56 +1,5 @@
-ARG BUILD_FROM=ghcr.io/hassio-addons/base:17.2.5
-
-FROM python:3.14-alpine3.21 as python-build
-
-# Stream Deck dependencies
-# Install dependencies (without version pinning to avoid build failures when Alpine updates)
-# hadolint ignore=DL3018
-RUN apk --no-cache add \
-    # Stream Deck dependencies
-    libusb \
-    libusb-dev \
-    hidapi-dev \
-    libffi-dev \
-    # Needed for cairosvg
-    cairo-dev \
-    # Needed for lxml
-    libxml2-dev \
-    libxslt-dev \
-    # Needed for Pillow
-    jpeg-dev \
-    zlib-dev \
-    freetype-dev \
-    libpng-dev \
-    # Needed for pip install
-    && apk add --no-cache --virtual build-deps \
-    # General
-    gcc \
-    python3-dev \
-    musl-dev
-
-# Download and unzip the repository
-ARG VERSION=2025.7.0
-# hadolint ignore=SC2034,DL3018
-RUN apk --no-cache --virtual .download-deps add \
-    unzip \
-    wget && \
-    echo "Downloading version ${VERSION}..." && \
-    wget -nv https://github.com/basnijholt/home-assistant-streamdeck-yaml/archive/refs/tags/v${VERSION}.zip -O v${VERSION}.zip && \
-    echo "Unzipping..." && \
-    unzip v${VERSION}.zip && \
-    echo "Moving files..." && \
-    mv home-assistant-streamdeck-yaml-${VERSION} /app && \
-    echo "Cleaning up..." && \
-    rm v${VERSION}.zip && \
-    apk del .download-deps
-
-# Set the working directory to the repository
-WORKDIR /app
-
-# Install the required dependencies
-RUN SETUPTOOLS_SCM_PRETEND_VERSION=${VERSION} pip install --no-cache-dir -e "."
-
 # hadolint ignore=DL3006
+ARG BUILD_FROM=ghcr.io/hassio-addons/base:17.2.5
 FROM ${BUILD_FROM}
 
 # Build arguments
@@ -58,12 +7,15 @@ ARG BUILD_ARCH=amd64
 ARG BUILD_DATE
 ARG BUILD_REF
 ARG BUILD_VERSION
-ARG BUILD_FROM
+ARG VERSION=2025.7.0
 
-# Install runtime dependencies in the final image (not copied from build stage to avoid library conflicts)
+# Install runtime dependencies and build dependencies
 # hadolint ignore=DL3018
 RUN apk --no-cache add \
+    # Python
     python3 \
+    py3-pip \
+    # Runtime dependencies
     libusb \
     hidapi \
     libffi \
@@ -74,11 +26,37 @@ RUN apk --no-cache add \
     libjpeg-turbo \
     zlib \
     freetype \
-    libpng
-
-# Copy installed Python and app from the previous stage
-COPY --from=python-build /usr/local /usr/local
-COPY --from=python-build /app /app
+    libpng \
+    # Build dependencies (will be removed after pip install)
+    && apk add --no-cache --virtual .build-deps \
+    gcc \
+    python3-dev \
+    musl-dev \
+    libusb-dev \
+    hidapi-dev \
+    libffi-dev \
+    cairo-dev \
+    libxml2-dev \
+    libxslt-dev \
+    jpeg-dev \
+    zlib-dev \
+    freetype-dev \
+    libpng-dev \
+    # Download dependencies
+    unzip \
+    wget \
+    # Download and install the application
+    && echo "Downloading version ${VERSION}..." \
+    && wget -nv https://github.com/basnijholt/home-assistant-streamdeck-yaml/archive/refs/tags/v${VERSION}.zip -O /tmp/v${VERSION}.zip \
+    && echo "Unzipping..." \
+    && unzip /tmp/v${VERSION}.zip -d /tmp \
+    && mv /tmp/home-assistant-streamdeck-yaml-${VERSION} /app \
+    && rm /tmp/v${VERSION}.zip \
+    # Install Python dependencies
+    && cd /app \
+    && SETUPTOOLS_SCM_PRETEND_VERSION=${VERSION} pip install --no-cache-dir --break-system-packages -e "." \
+    # Clean up build dependencies
+    && apk del .build-deps
 
 # Copy rootfs
 COPY rootfs /
