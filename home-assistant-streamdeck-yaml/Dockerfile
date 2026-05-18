@@ -13,6 +13,8 @@ ARG VERSION=2026.1.0
 # hadolint ignore=DL3018,DL3003
 RUN apk --no-cache add \
     # Python
+    musl \
+    musl-utils \
     python3 \
     py3-pip \
     # Runtime dependencies
