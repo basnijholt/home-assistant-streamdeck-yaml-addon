@@ -31,7 +31,7 @@ RUN apk --no-cache add \
     && apk add --no-cache --virtual .build-deps \
     gcc \
     python3-dev \
-    musl-dev \
+    libc-dev \
     libusb-dev \
     hidapi-dev \
     libffi-dev \
