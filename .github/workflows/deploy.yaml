@@ -13,10 +13,222 @@ on:
       - completed
 
 jobs:
-  workflows:
-    uses: hassio-addons/workflows/.github/workflows/addon-deploy.yaml@main
-    secrets:
-      CAS_API_KEY: ${{ secrets.CAS_API_KEY }}
-      DISPATCH_TOKEN: ${{ secrets.DISPATCH_TOKEN }}
-    with:
-      repository: home-assistant-addons
+  information:
+    if: |
+      github.event_name != 'workflow_run'
+      || github.event.workflow_run.conclusion == 'success'
+    name: Gather add-on information
+    runs-on: ubuntu-latest
+    outputs:
+      architectures: ${{ steps.information.outputs.architectures }}
+      build: ${{ steps.information.outputs.build }}
+      description: ${{ steps.information.outputs.description }}
+      environment: ${{ steps.release.outputs.environment }}
+      name: ${{ steps.information.outputs.name }}
+      slug: ${{ steps.information.outputs.slug }}
+      target: ${{ steps.information.outputs.target }}
+      version: ${{ steps.release.outputs.version }}
+    steps:
+      - name: ⤵️ Check out code from GitHub
+        uses: actions/checkout@v6
+      - name: 🚀 Run add-on information action
+        id: information
+        uses: frenck/action-addon-information@v1.4.2
+      - name: ℹ️ Gather version and environment
+        id: release
+        run: |
+          environment="edge"
+          version="${GITHUB_SHA:0:7}"
+          if [[ "${{ github.event_name }}" = "release" ]]; then
+            version="${{ github.event.release.tag_name }}"
+            version="${version,,}"
+            version="${version#v}"
+            environment="stable"
+            if [[ "${{ github.event.release.prerelease }}" = "true" ]]; then
+              environment="beta"
+            fi
+          fi
+
+          echo "environment=${environment}" >> "$GITHUB_OUTPUT"
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
+
+  deploy:
+    name: Build & Deploy ${{ matrix.architecture }}
+    needs: information
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        architecture: ${{ fromJson(needs.information.outputs.architectures) }}
+    steps:
+      - name: ⤵️ Check out code from GitHub
+        uses: actions/checkout@v6
+      - name: 🏗 Set up QEMU
+        uses: docker/setup-qemu-action@v3.7.0
+      - name: 🏗 Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3.12.0
+      - name: ℹ️ Compose build flags
+        id: flags
+        env:
+          ARCHITECTURE: ${{ matrix.architecture }}
+          BUILD_FILE: ${{ needs.information.outputs.build }}
+        run: |
+          echo "date=$(date +"%Y-%m-%dT%H:%M:%SZ")" >> "$GITHUB_OUTPUT"
+          from=$(yq --no-colors eval ".build_from.${ARCHITECTURE}" \
+            "${BUILD_FILE}")
+          echo "from=${from}" >> "$GITHUB_OUTPUT"
+
+          if [[ "${ARCHITECTURE}" = "amd64" ]]; then
+            echo "platform=linux/amd64" >> "$GITHUB_OUTPUT"
+          elif [[ "${ARCHITECTURE}" = "i386" ]]; then
+            echo "platform=linux/386" >> "$GITHUB_OUTPUT"
+          elif [[ "${ARCHITECTURE}" = "armhf" ]]; then
+            echo "platform=linux/arm/v6" >> "$GITHUB_OUTPUT"
+          elif [[ "${ARCHITECTURE}" = "armv7" ]]; then
+            echo "platform=linux/arm/v7" >> "$GITHUB_OUTPUT"
+          elif [[ "${ARCHITECTURE}" = "aarch64" ]]; then
+            echo "platform=linux/arm64/v8" >> "$GITHUB_OUTPUT"
+          else
+            echo "::error ::Unknown architecture ${ARCHITECTURE}"
+            exit 1
+          fi
+      - name: 🏗 Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: 🚀 Build and push
+        uses: docker/build-push-action@v6.19.2
+        with:
+          # yamllint disable rule:line-length
+          outputs: type=image,push=true,compression=zstd,compression-level=9,force-compression=true,oci-mediatypes=true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/${{ needs.information.outputs.slug }}/${{ matrix.architecture }}:${{ needs.information.outputs.environment }}
+            ghcr.io/${{ github.repository_owner }}/${{ needs.information.outputs.slug }}/${{ matrix.architecture }}:${{ needs.information.outputs.version }}
+          context: ${{ needs.information.outputs.target }}
+          file: ${{ needs.information.outputs.target }}/Dockerfile
+          cache-from: |
+            type=gha,scope=${{ matrix.architecture }}
+            type=registry,ref=ghcr.io/${{ github.repository_owner }}/${{ needs.information.outputs.slug }}/${{ matrix.architecture }}:edge
+          # yamllint enable rule:line-length
+          cache-to: type=gha,mode=max,scope=${{ matrix.architecture }}
+          platforms: ${{ steps.flags.outputs.platform }}
+          build-args: |
+            BUILD_ARCH=${{ matrix.architecture }}
+            BUILD_DATE=${{ steps.flags.outputs.date }}
+            BUILD_DESCRIPTION=${{ needs.information.outputs.description }}
+            BUILD_FROM=${{ steps.flags.outputs.from }}
+            BUILD_NAME=${{ needs.information.outputs.name }}
+            BUILD_REF=${{ github.sha }}
+            BUILD_REPOSITORY=${{ github.repository }}
+            BUILD_VERSION=${{ needs.information.outputs.version }}
+
+  manifest:
+    name: Build & Push Multi Arch Manifest
+    needs:
+      - information
+      - deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🏗 Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3.12.0
+      - name: 🏗 Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: 🚀 Create and push manifest
+        env:
+          REPO_OWNER: ${{ github.repository_owner }}
+          SLUG: ${{ needs.information.outputs.slug }}
+          ENVIRONMENT: ${{ needs.information.outputs.environment }}
+          VERSION: ${{ needs.information.outputs.version }}
+          ARCHITECTURES: ${{ needs.information.outputs.architectures }}
+        run: |
+          sources=()
+          for arch in $(echo "${ARCHITECTURES}" | jq -r '.[]'); do
+            sources+=("ghcr.io/${REPO_OWNER}/${SLUG}/${arch}:${VERSION}")
+          done
+
+          docker buildx imagetools create \
+            --tag "ghcr.io/${REPO_OWNER}/${SLUG}:${ENVIRONMENT}" \
+            "${sources[@]}"
+
+          docker buildx imagetools create \
+            --tag "ghcr.io/${REPO_OWNER}/${SLUG}:${VERSION}" \
+            "${sources[@]}"
+
+  publish-edge:
+    name: Publish to edge repository
+    if: needs.information.outputs.environment == 'edge'
+    needs:
+      - information
+      - deploy
+    environment:
+      name: edge
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🚀 Dispatch repository updater update signal
+        uses: peter-evans/repository-dispatch@v4
+        with:
+          token: ${{ secrets.DISPATCH_TOKEN }}
+          repository: ${{ github.repository_owner }}/repository-edge
+          event-type: update
+          client-payload: >
+            {
+              "app": "${{ needs.information.outputs.slug }}",
+              "name": "${{ needs.information.outputs.name }}",
+              "repository": "${{ github.repository }}",
+              "version": "${{ needs.information.outputs.version }}"
+            }
+
+  publish-beta:
+    name: Publish to beta repository
+    if: |
+      needs.information.outputs.environment == 'beta' ||
+      needs.information.outputs.environment == 'stable'
+    needs:
+      - information
+      - deploy
+    environment:
+      name: beta
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🚀 Dispatch repository updater update signal
+        uses: peter-evans/repository-dispatch@v4
+        with:
+          token: ${{ secrets.DISPATCH_TOKEN }}
+          repository: ${{ github.repository_owner }}/repository-beta
+          event-type: update
+          client-payload: >
+            {
+              "app": "${{ needs.information.outputs.slug }}",
+              "name": "${{ needs.information.outputs.name }}",
+              "repository": "${{ github.repository }}",
+              "version": "${{ github.event.release.tag_name }}"
+            }
+
+  publish-stable:
+    name: Publish to stable repository
+    if: needs.information.outputs.environment == 'stable'
+    needs:
+      - information
+      - deploy
+    environment:
+      name: stable
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🚀 Dispatch repository updater update signal
+        uses: peter-evans/repository-dispatch@v4
+        with:
+          token: ${{ secrets.DISPATCH_TOKEN }}
+          repository: ${{ github.repository_owner }}/home-assistant-addons
+          event-type: update
+          client-payload: >
+            {
+              "app": "${{ needs.information.outputs.slug }}",
+              "name": "${{ needs.information.outputs.name }}",
+              "repository": "${{ github.repository }}",
+              "version": "${{ github.event.release.tag_name }}"
+            }
