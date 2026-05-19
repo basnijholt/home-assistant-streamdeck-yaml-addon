@@ -21,7 +21,7 @@ jobs:
           echo "Detected version: $VERSION"
 
       - name: Draft Release
-        uses: release-drafter/release-drafter@v6
+        uses: release-drafter/release-drafter@v7
         with:
           name: "v${{ steps.version.outputs.version }}"
           tag: "v${{ steps.version.outputs.version }}"
