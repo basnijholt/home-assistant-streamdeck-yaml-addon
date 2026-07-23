@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v6.1.0
 
       - name: Get version from config.yaml
         id: version
@@ -21,7 +21,7 @@ jobs:
           echo "Detected version: $VERSION"
 
       - name: Draft Release
-        uses: release-drafter/release-drafter@v7
+        uses: release-drafter/release-drafter@v7.6.0
         with:
           name: "v${{ steps.version.outputs.version }}"
           tag: "v${{ steps.version.outputs.version }}"
